@@ -1,0 +1,456 @@
+package hook;
+
+option java_package = "com.sasaug.shadowchat.message";
+option java_outer_classname = "Message";
+
+enum Type {
+	//basic
+    AUTH = 0;
+	AUTH_RESPONSE = 1;
+	REGISTER = 2;
+	REGISTER_RESPONSE = 3;
+	VERIFY = 4;
+	VERIFY_RESPONSE = 5;
+	REQUESTPIN = 6;
+	REQUESTPIN_RESPONSE = 7;
+	
+	//friends
+	ADDFRIEND = 10;
+	ADDFRIEND_RESPONSE = 11;
+	FRIEND_REQUEST = 12;
+	ACCEPTFRIEND = 13;
+	ACCEPTFRIEND_RESPONSE = 14;
+	DELETEFRIEND = 15;
+	DELETEFRIEND_RESPONSE = 16;
+	LISTCONTACTS = 17;
+	LISTCONTACTS_RESPONSE = 18;
+	
+	//group
+	CREATEGROUP = 30;
+	CREATEGROUP_RESPONSE = 31;
+	INVITETOGROUP = 32;
+	INVITETOGROUP_RESPONSE = 33;
+	JOINGROUP = 34;
+	JOINGROUP_RESPONSE = 35;
+	UPDATEGROUP = 36;
+	UPDATEGROUP_RESPONSE = 37;
+	GROUPINVITE = 38;
+	
+	//request info
+	GETAVATAR = 50;
+	GETAVATAR_RESPONSE = 51;
+	USERINFO = 52;
+	USERINFORESPONSE = 53;
+	SEARCH = 54;
+	SEARCH_RESPONSE = 55;
+	
+	//Message
+	ACK = 70;
+	SIMPLE = 71;
+	GALLERY = 72;
+	TYPING = 73;
+	LIVEBOARD = 74;
+	NUDGE = 75;
+	JSON = 76;	
+	
+	ECDH_KEYX = 90;	
+		
+	ONLINE = 95;
+	KEEPALIVE = 96;
+	KEEPALIVE_RESPONSE = 97;
+	
+	INITIAL = 98;
+	INITIAL_RESPONSE = 99;
+}
+
+enum OS {
+    ANDROID = 0;
+    IOS = 1;
+    OTHERS = 2;
+}
+
+enum Verification {
+    NOT_REQUIRED = 0;
+	FAIL = 1;
+	REQUIRED_OLDTAC = 2;
+	REQUIRED = 3;
+}
+
+enum ACKType {
+    SENT = 0;
+	RECEIVED = 1;
+	COMPLETE = 2;
+	SEEN = 3;
+}
+
+enum DrawType {
+    DOWN = 0;
+	MOVE = 1;
+	UP = 2;
+	COLOR = 3;
+	BRUSHWIDTH = 4;
+	ERASER = 5;
+}
+
+message Emoji{
+	required string tag = 1;
+	required bytes image = 2;
+}
+
+message User{
+	required string username = 1;
+	required string name = 2;
+	required string avatar = 3;
+	repeated string flag = 4;
+	required bool isGroup = 10;
+	repeated User users = 11;
+	optional string invited = 12;
+}
+
+message DrawEventItem{
+	required DrawType type = 1;
+	required int32 timestamp = 2;
+	optional float x = 3;
+	optional float y = 4;
+	optional int32 color = 5;
+	optional int32 brushwidth = 6;
+	optional bool erase = 7;
+}
+
+message DrawEventsStorage{
+	required int32 width = 1;
+	required int32 height = 2;
+	repeated DrawEventItem events = 3;
+}
+
+message Base {
+  required Type type = 1;
+}
+
+message Initial {
+  required Type type = 1;
+}
+
+message InitialResponse {
+  required Type type = 1;
+  required int32 errorCode = 2;
+  optional string info = 3;
+}
+
+message Auth {
+  required Type type = 1;
+  required string username = 2;
+  required string password = 3; 
+  required OS os = 4;
+  required string device = 5;
+  optional string cloudId= 6;
+}
+
+message AuthResponse {
+  required Type type = 1;
+  required int32 errorCode = 2;
+}
+
+message Register {
+  required Type type = 1;
+  required string username = 2;
+  required string password = 3;
+  required string name = 4;
+  required string device = 5;
+  optional string email = 6;
+  optional string phone = 7;
+  optional string serverPassword = 10;
+}
+
+message RegisterResponse {
+  required Type type = 1;
+  required int32 errorCode = 2;
+  optional Verification status = 3;
+}
+
+message Verify {
+  required Type type = 1;
+  required string username = 2;
+  required string password = 3;
+  required string device = 4;
+  required string code = 5;
+}
+
+message VerifyResponse {
+  required Type type = 1;
+  required int32 errorCode = 2;
+  required Verification status = 3;
+}
+
+message RequestPin {
+  required Type type = 1;
+  required string username = 2;
+  required string password = 3;
+  required string device = 4;
+}
+
+message RequestPinResponse {
+  required Type type = 1;
+  required int32 errorCode = 2;
+  required Verification status = 3;
+}
+
+message AddFriend {
+  required Type type = 1;
+  required string friend = 2;
+  repeated bytes keys = 3;
+}
+
+message AddFriendResponse {
+  required Type type = 1;
+  required int32 errorCode = 2;
+  optional User user = 3;
+}
+
+message FriendRequest {
+  required Type type = 1;
+  required int32 status = 2;
+  optional User user = 3;
+  repeated bytes keys = 4;
+  repeated string referenceKeyHash = 5;
+}
+
+message AcceptFriend {
+  required Type type = 1;
+  required bool accept = 2;
+  required string friend = 3;
+  repeated bytes keys = 4;
+  repeated string referenceKeyHash = 5;
+}
+
+message AcceptFriendResponse {
+  required Type type = 1;
+  required int32 errorCode = 2;
+}
+
+message DeleteFriend {
+  required Type type = 1;
+  required string friend = 2;
+}
+
+message DeleteFriendResponse {
+  required Type type = 1;
+  required int32 errorCode = 2;
+}
+
+message ListContacts {
+  required Type type = 1;
+}
+
+message ListContactsResponse {
+  required Type type = 1;
+  required int32 errorCode = 2;
+  repeated User friends = 3;
+}
+
+message GetAvatar {
+  required Type type = 1;
+  required string hash = 2;
+}
+
+message GetAvatarResponse {
+  required Type type = 1;
+  required int32 errorCode = 2;
+  optional bytes avatar = 3;
+}
+
+message UserInfo {
+  required Type type = 1;
+  optional string target = 2;
+}
+
+message UserInfoResponse {
+  required Type type = 1;
+  required int32 errorCode = 2;
+  required string target = 3;
+  required int64 lastseen = 4;
+  required bool status = 5;
+}
+
+message CreateGroup {
+  required Type type = 1;
+  required string name = 2;
+  optional bytes avatar = 3;
+  required string owner = 4;
+}
+
+message CreateGroupResponse {
+  required Type type = 1;
+  required int32 errorCode = 2;
+  required User group = 3;
+}
+
+message InviteToGroup {
+  required Type type = 1;
+  required string group = 2;
+  required string user = 3;
+  optional bytes key = 4;
+}
+
+message InviteToGroupResponse {
+  required Type type = 1;
+  required int32 errorCode = 2;
+}
+
+message GroupInvite {
+  required Type type = 1;
+  required int32 status = 2;
+  required User group = 3;
+  optional bytes key = 4;
+  optional string referenceKeyHash = 5;
+}
+
+message JoinGroup {
+  required Type type = 1;
+  required bool accept = 2;
+  required string group = 3;
+  optional bytes key = 4;
+  optional string referenceKeyHash = 5;
+}
+
+message JoinGroupResponse {
+  required Type type = 1;
+  required int32 errorCode = 2;
+}
+
+message UpdateGroup {
+  required Type type = 1;
+  required string group = 2;
+  optional string name = 3;
+  optional bytes image = 4;
+}
+
+message UpdateGroupResponse {
+  required Type type = 1;
+  required int32 errorCode = 2;
+}
+
+message Search{
+  required Type type = 1;
+  required string term = 2;
+}
+
+message SearchResponse{
+  required Type type = 1;
+  required int32 errorCode = 2;
+  repeated User list = 3;
+}
+
+message ECDHKeyExchangeMessage {
+  required Type type = 1;
+  required int32 id = 2;
+  optional int64 timestamp = 3;
+  required string origin = 4;
+  required string target = 5;
+  optional string group = 6;
+  optional string keyHash = 7;
+  repeated bytes keys = 8;
+  repeated string referenceKeyHashes = 9;
+}
+
+message SimpleMessage {
+  required Type type = 1;
+  required int32 id = 2;
+  optional int64 timestamp = 3;
+  required string origin = 4;
+  required string target = 5;
+  optional string group = 6;
+  optional string keyHash = 7;
+  required string message = 8;
+  repeated Emoji emoji = 9;
+}
+
+message GalleryMessage {
+  required Type type = 1;
+  required int32 id = 2;
+  optional int64 timestamp = 3;
+  required string origin = 4;
+  required string target = 5;
+  optional string group = 6;
+  optional string keyHash = 7;
+  required string message = 8;
+  repeated Emoji emoji = 9;
+  required int32 imageId = 10;
+  required bytes imageData = 11; 
+}
+
+message LiveBoardMessage{
+  required Type type = 1;
+  required int32 id = 2;
+  optional int64 timestamp = 3;
+  required string origin = 4;
+  required string target = 5;
+  optional string group = 6;
+  optional string keyHash = 7;
+  optional string message = 8;
+  repeated Emoji emoji = 9;
+  required int32 width = 10;
+  required int32 height = 11;
+  repeated DrawEventItem events = 12;
+}
+
+message NudgeMessage{
+  required Type type = 1;
+  required int32 id = 2;
+  optional int64 timestamp = 3;
+  required string origin = 4;
+  required string target = 5;
+  optional string group = 6;
+  optional string keyHash = 7;
+  optional string message = 8;
+  repeated Emoji emoji = 9;
+}
+
+message JsonMessage{
+  required Type type = 1;
+  required int32 id = 2;
+  optional int64 timestamp = 3;
+  required string origin = 4;
+  required string target = 5;
+  optional string group = 6;
+  optional string keyHash = 7;
+  required string data = 8;
+  optional string message = 9;
+  repeated Emoji emoji = 10;
+}
+
+message TypingMessage {
+  required Type type = 1;
+  required string origin = 2;
+  required string target = 3;
+  optional string group = 4;
+}
+
+message OnlineMessage {
+  required Type type = 1;
+  required string origin = 2;
+  optional string group = 3;
+}
+
+message KeepAliveMessage {
+  required Type type = 1;
+}
+
+message BaseMessage {
+  required Type type = 1;
+  required int32 id = 2;
+  optional int64 timestamp = 3;
+  required string origin = 4;
+  required string target = 5;
+  optional string group = 6;
+}
+
+message Ack {
+  required Type type = 1;
+  required ACKType ackType = 2;
+  optional string hash = 3;
+  optional BaseMessage message = 4;
+}
+
+
+

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/Sasaug/Dropbox/Projects/ShadowNet/libs/bcprov-jdk15on-151.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Sasaug/Dropbox/Projects/ShadowNet/libs/commons-pool2-2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Sasaug/Dropbox/Projects/ShadowNet/libs/gson-2.2.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Sasaug/Dropbox/Projects/ShadowNet/libs/javax.mail.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Sasaug/Dropbox/Projects/ShadowNet/libs/jetty-all-9.26.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Sasaug/Dropbox/Projects/ShadowNet/libs/json_simple-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Sasaug/Dropbox/Projects/ShadowNet/libs/netty-all-4.0.25.Final.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
